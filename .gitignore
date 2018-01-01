@@ -1,0 +1,2 @@
+*.nixops-shm
+*.nixops-wal

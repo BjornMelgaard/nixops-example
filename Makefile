@@ -1,13 +1,25 @@
-BASENAME=$(notdir $(CURDIR:%/=%))
+.DEFAULT_GOAL := runner_run
 
-env_build:
-	docker build \
-		--build-arg APP_DIR="/app" \
-		-t="${BASENAME}" \
-		.
+######################
+runner_build:
+	docker-compose \
+		-f runner/docker-compose.yml \
+		build
 
-env_run:
-	docker run \
-		-it \
-		-v ${CURDIR}:/app \
-		"${BASENAME}"
+runner_run:
+	docker-compose \
+		-f runner/docker-compose.yml \
+		run runner
+
+######################
+
+# XXX:
+# run command below outside docker after nixops_create
+# sudo chown `whoami`:users ./*.nixops
+
+nixops_create:
+	nixops create ./base.nix
+
+nixops_purge:
+	nixops destroy --all
+	nixops delete --all

@@ -1,2 +1,2 @@
-localstate.nixops filter=git-crypt
-.env filter=git-crypt diff=git-crypt
+*.nixops filter=git-crypt diff=git-crypt
+*.env filter=git-crypt diff=git-crypt

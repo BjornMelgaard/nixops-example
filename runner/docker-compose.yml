@@ -1,0 +1,22 @@
+version: '2.2'
+
+volumes:
+  # cache
+  nix_store:
+
+services:
+  runner:
+    stdin_open: true
+    tty: true
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        - WORKDIR=/app
+    env_file: secrets.env
+    environment:
+      NIXOPS_DEPLOYMENT: foo
+      NIXOPS_STATE: /app/state.nixops
+    volumes:
+      - ..:/app
+      - nix_store:/nix/store
