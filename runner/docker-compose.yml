@@ -19,4 +19,5 @@ services:
       NIXOPS_STATE: /app/state.nixops
     volumes:
       - ..:/app
+      - ../../vd-rails:/backend-app
       - nix_store:/nix/store

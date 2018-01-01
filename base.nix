@@ -1,6 +1,8 @@
 let
   region = "us-east-1";
   t2micro = "t2.micro";
+
+  subnet = "subnet-14930963";
 in
 
 {
@@ -12,20 +14,26 @@ in
     inherit region;
   };
 
-  backend =
-    { config, pkgs, resources, ... }:
+  resources.elasticFileSystems.nixStore = {
+    inherit region;
+    size = 4;
+    tags.Name = "Shareable nix store";
+  };
+
+  # resources.s3Buckets.backups = {
+  #   inherit region;
+  #   size = 3;
+  # };
+
+  resources.elasticFileSystemMountTargets.nixStoreMount =
+    { resources, ... }:
     {
-      imports = [
-        ./modules/common.nix
-      ];
-
-      deployment.targetEnv = "ec2";
-      deployment.ec2.region = region;
-      deployment.ec2.instanceType = t2micro;
-      deployment.ec2.keyPair = resources.ec2KeyPairs.appKeyPair;
-
-      networking.firewall.allowedTCPPorts = [
-        80
-      ];
+      inherit region subnet;
+      fileSystem = resources.elasticFileSystems.nixStore;
     };
+
+  backend = import ./backend.nix {
+    inherit region subnet;
+    instanceType = t2micro;
+  };
 }
