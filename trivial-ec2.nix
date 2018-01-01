@@ -18,7 +18,7 @@ let
 
       deployment.ec2.keyPair = resources.ec2KeyPairs.appKeyPair;
 
-      deployment.ec2.securityGroups = [ "allow-ssh" "allow-http" ];
+      deployment.ec2.securityGroups = [ "allow-ssh" ];
     };
 
 in
