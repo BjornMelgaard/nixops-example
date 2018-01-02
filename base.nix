@@ -1,8 +1,7 @@
 let
   region = "us-east-1";
   t2micro = "t2.micro";
-
-  subnet = "subnet-14930963";
+  sharedNixStoreEfsDnsName = "fs-3efcfc77.efs.us-east-1.amazonaws.com";
 in
 
 {
@@ -14,26 +13,8 @@ in
     inherit region;
   };
 
-  resources.elasticFileSystems.nixStore = {
-    inherit region;
-    size = 4;
-    tags.Name = "Shareable nix store";
-  };
-
-  # resources.s3Buckets.backups = {
-  #   inherit region;
-  #   size = 3;
-  # };
-
-  resources.elasticFileSystemMountTargets.nixStoreMount =
-    { resources, ... }:
-    {
-      inherit region subnet;
-      fileSystem = resources.elasticFileSystems.nixStore;
-    };
-
   backend = import ./backend.nix {
-    inherit region subnet;
+    inherit region sharedNixStoreEfsDnsName;
     instanceType = t2micro;
   };
 }

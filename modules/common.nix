@@ -6,28 +6,38 @@ with (import ../shared/keys.nix);
 {
   services.openssh.passwordAuthentication = false;
   services.openssh.enable = true;
+  services.cloud-init.enable = true;
 
   users = {
     mutableUsers = false;
     defaultUserShell = zsh;
 
-    extraUsers.root.openssh.authorizedKeys.keys = devOpsKeys;
+    extraUsers.root.openssh.authorizedKeys.keys = devKeys;
 
-    extraUsers.www = {
+    extraUsers.admin = {
       extraGroups = [ "wheel" ];
       isNormalUser = true;
       openssh.authorizedKeys.keys = devKeys;
     };
 
-    extraGroups.www = {};
+    extraGroups.admin = {};
+  };
+
+  security = {
+    sudo = {
+      enable = true;
+      wheelNeedsPassword = false;
+    };
   };
 
   environment = {
     systemPackages = [
       tmux
       neovim
-      docker
       git
+      ranger
+      docker
+      docker_compose
     ];
 
     variables = {

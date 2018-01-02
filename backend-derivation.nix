@@ -1,9 +1,10 @@
-# test installation with `nix-build backend-app.nix`
+# test installation with `nix-build backend-derivation.nix`
 
 { pkgs ? (import <nixpkgs> {}), ... }:
 
 with pkgs;
 
+# TODO: local -> fetchFromGit
 stdenv.mkDerivation {
   name = "backend";
   src = /backend-app;

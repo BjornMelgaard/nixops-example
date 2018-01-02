@@ -46,7 +46,6 @@ in
     };
     serviceConfig = {
       Type = "oneshot";
-      Restart = "no";
       RemainAfterExit = "yes";
 
       User = "www";
