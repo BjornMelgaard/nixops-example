@@ -1,7 +1,6 @@
 { pkgs, ... }:
 
 with pkgs;
-with (import ../shared/keys.nix);
 
 {
   services.openssh.passwordAuthentication = false;
@@ -12,12 +11,9 @@ with (import ../shared/keys.nix);
     mutableUsers = false;
     defaultUserShell = zsh;
 
-    extraUsers.root.openssh.authorizedKeys.keys = devKeys;
-
     extraUsers.admin = {
       extraGroups = [ "wheel" ];
       isNormalUser = true;
-      openssh.authorizedKeys.keys = devKeys;
     };
 
     extraGroups.admin = {};

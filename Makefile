@@ -1,6 +1,7 @@
 .DEFAULT_GOAL := runner_run
 
 ######################
+# Run outside container
 runner_build:
 	docker-compose \
 		-f runner/docker-compose.yml \
@@ -12,6 +13,7 @@ runner_run:
 		run runner
 
 ######################
+# Run inside container
 
 # XXX:
 # run command below outside docker after nixops_create

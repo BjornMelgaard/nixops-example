@@ -1,7 +1,6 @@
 let
   region = "us-east-1";
   t2micro = "t2.micro";
-  sharedNixStoreEfsDnsName = "fs-3efcfc77.efs.us-east-1.amazonaws.com";
 in
 
 {
@@ -13,8 +12,8 @@ in
     inherit region;
   };
 
-  backend = import ./backend.nix {
-    inherit region sharedNixStoreEfsDnsName;
+  backend = import ./backend {
+    inherit region;
     instanceType = t2micro;
   };
 }

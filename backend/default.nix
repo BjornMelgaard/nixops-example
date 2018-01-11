@@ -1,17 +1,22 @@
-{ region, instanceType, sharedNixStoreEfsDnsName }:
+{ region, instanceType }:
 { config, pkgs, resources, lib, ... }:
+
+with (import ../lib/keys.nix);
 
 with lib;
 with pkgs;
 
 let
-  backendApp = import ./backend-derivation.nix { inherit pkgs; };
+  environment = import ./env.nix;
+  backendApp = import ./derivation.nix { inherit pkgs; };
 in
-
 {
   imports = [
-    ./modules/common.nix
+    ../common
   ];
+
+  users.extraUsers.root.openssh.authorizedKeys.keys = devKeys;
+  users.extraUsers.admin.openssh.authorizedKeys.keys = devKeys;
 
   deployment.targetEnv = "ec2";
 
@@ -19,17 +24,8 @@ in
     inherit region instanceType;
     keyPair = resources.ec2KeyPairs.appKeyPair;
     associatePublicIpAddress = true;
-    ebsInitialRootDiskSize = 5;
+    ebsInitialRootDiskSize = 10;
     tags.Name = "Backend";
-  };
-
-  boot.supportedFilesystems = [ "nfs4" ];
-
-  # TODO: not applied
-  fileSystems."/nix/store" = {
-    fsType = "nfs";
-    device = "${sharedNixStoreEfsDnsName}:/";
-    options = [ "nfsvers=4.1,rsize=1048576,wsize=1048576,hard,timeo=600,retrans=2" ];
   };
 
   networking.firewall.allowedTCPPorts = [
@@ -41,9 +37,7 @@ in
     after = [ "network.target" "docker.service" ];
     requires = [ "docker.service" ];
 
-    environment = {
-      BE_PORT = "80";
-    };
+    inherit environment;
     serviceConfig = {
       Type = "oneshot";
       RemainAfterExit = "yes";

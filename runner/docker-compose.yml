@@ -13,11 +13,16 @@ services:
       dockerfile: Dockerfile
       args:
         - WORKDIR=/app
-    env_file: secrets.env
+    env_file:
+      - ./aws.env
     environment:
       NIXOPS_DEPLOYMENT: foo
       NIXOPS_STATE: /app/state.nixops
     volumes:
-      - ..:/app
-      - ../../vd-rails:/backend-app
       - nix_store:/nix/store
+
+      - ./ssh_config:/etc/ssh/ssh_config
+      - ./id_rsa:/ssh/id_rsa
+
+      - ..:/app
+      - ../../vd-rails:/backend

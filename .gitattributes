@@ -1,2 +1,4 @@
 *.nixops filter=git-crypt diff=git-crypt
+
 *.env filter=git-crypt diff=git-crypt
+backend/env.nix filter=git-crypt diff=git-crypt
