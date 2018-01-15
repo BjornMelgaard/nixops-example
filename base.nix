@@ -1,10 +1,10 @@
 let
-  region = "us-east-1";
+  region = "us-west-2";
   t2micro = "t2.micro";
 in
 
 {
-  network.description = "Vdare network";
+  network.description = "Vdare nixops network";
   network.enableRollback = true;
 
   # Provision an EC2 key pair.

@@ -24,8 +24,9 @@ in
     inherit region instanceType;
     keyPair = resources.ec2KeyPairs.appKeyPair;
     associatePublicIpAddress = true;
-    ebsInitialRootDiskSize = 10;
-    tags.Name = "Backend";
+    ebsInitialRootDiskSize = 100;
+    tags.Name = "Vdare nixops backend";
+    securityGroups = [ "vdare-nixops" ];
   };
 
   networking.firewall.allowedTCPPorts = [
@@ -42,7 +43,9 @@ in
       Type = "oneshot";
       RemainAfterExit = "yes";
 
-      User = "www";
+      User = "amdin";
+
+      # ExecStartPre = "${docker_compose}/bin/docker-compose -f ${backendApp}/docker-compose.prod.yml run be rake assets:precompile";
 
       ExecStart = "${docker_compose}/bin/docker-compose -f ${backendApp}/docker-compose.prod.yml up -d --build";
 

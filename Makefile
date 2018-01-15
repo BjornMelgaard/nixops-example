@@ -19,9 +19,9 @@ runner_run:
 # run command below outside docker after nixops_create
 # sudo chown `whoami`:users ./*.nixops
 
-nixops_create:
+create:
 	nixops create ./base.nix
 
-nixops_purge:
+purge:
 	nixops destroy --all
 	nixops delete --all

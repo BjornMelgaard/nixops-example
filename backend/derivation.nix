@@ -27,6 +27,7 @@ stdenv.mkDerivation {
   src = /backend;
 
   # src = /app/common;
+  buildInputs = [ git ];
 
   # don't make
   dontBuild = true;
@@ -34,7 +35,14 @@ stdenv.mkDerivation {
   # copy all files including hidden
   installPhase = ''
     mkdir -p $out
+
+    # copy all
     cp -r * $out/
     cp -r .[^.]* $out/
+    echo "Copy done"
+
+    # remove ignored
+    (cd $out && git clean -xdf)
+    echo "Remove ignored done"
   '';
 }

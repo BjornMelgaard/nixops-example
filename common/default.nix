@@ -12,7 +12,7 @@ with pkgs;
     defaultUserShell = zsh;
 
     extraUsers.admin = {
-      extraGroups = [ "wheel" ];
+      extraGroups = [ "wheel" "docker" ];
       isNormalUser = true;
     };
 
