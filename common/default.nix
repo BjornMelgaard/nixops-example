@@ -34,6 +34,7 @@ with pkgs;
       ranger
       docker
       docker_compose
+      gnumake
     ];
 
     variables = {

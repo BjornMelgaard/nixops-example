@@ -6,10 +6,6 @@ with (import ../lib/keys.nix);
 with lib;
 with pkgs;
 
-let
-  environment = import ./env.nix;
-  backendApp = import ./derivation.nix { inherit pkgs; };
-in
 {
   imports = [
     ../common
@@ -33,23 +29,13 @@ in
     80
   ];
 
-  systemd.services.startBackend = {
-    wantedBy = [ "multi-user.target" ];
-    after = [ "network.target" "docker.service" ];
-    requires = [ "docker.service" ];
+  swapDevices = singleton
+  {
+    device = "/var/swap";
+    size = 2048;
 
-    inherit environment;
-    serviceConfig = {
-      Type = "oneshot";
-      RemainAfterExit = "yes";
-
-      User = "amdin";
-
-      # ExecStartPre = "${docker_compose}/bin/docker-compose -f ${backendApp}/docker-compose.prod.yml run be rake assets:precompile";
-
-      ExecStart = "${docker_compose}/bin/docker-compose -f ${backendApp}/docker-compose.prod.yml up -d --build";
-
-      ExecStop = "${docker_compose}/bin/docker-compose -f ${backendApp}/docker-compose.prod.yml stop";
-    };
+    # device = "/var/swapfile";
+    # label = "swapfile";
+    # size = 2048;
   };
 }

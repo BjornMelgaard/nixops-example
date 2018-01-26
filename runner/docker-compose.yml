@@ -2,7 +2,7 @@ version: '2.2'
 
 volumes:
   # cache
-  nix_store:
+  nix_cache:
 
 services:
   runner:
@@ -19,10 +19,5 @@ services:
       NIXOPS_DEPLOYMENT: foo
       NIXOPS_STATE: /app/state.nixops
     volumes:
-      - nix_store:/nix/store
-
-      - ./ssh_config:/etc/ssh/ssh_config
-      - ./id_rsa:/ssh/id_rsa
-
+      - nix_cache:/nix
       - ..:/app
-      - ../../vd-rails:/backend
